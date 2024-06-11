@@ -13,6 +13,7 @@ actions.command.start();
 actions.command.post();
 actions.command.postInterval();
 actions.hears.post();
+actions.on.message();
 
 bot.catch((err) => {
    const ctx = err.ctx;
