@@ -12,6 +12,7 @@ export const bot = new Bot(BOT_TOKEN);
 actions.command.start();
 actions.command.post();
 actions.command.postInterval();
+actions.hears.post();
 
 bot.catch((err) => {
    const ctx = err.ctx;
