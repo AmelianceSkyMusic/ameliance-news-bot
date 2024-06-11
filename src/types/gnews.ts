@@ -11,7 +11,9 @@ export type Article = {
    };
 };
 
-export type GNews = {
-   totalArticles: number;
-   articles: Array<Article>;
-};
+export type GNews =
+   | {
+        totalArticles: number;
+        articles: Array<Article>;
+     }
+   | { errors: Array<string> };
