@@ -9,7 +9,6 @@ export async function getArticleData() {
          `https://gnews.io/api/v4/top-headlines?country=ua&category=general&apikey=${process.env.G_NEWS_API_KEY}`,
       );
       const newsData: GNews = await respNews.json();
-      console.log('newsData: ', newsData);
 
       if (newsData && 'errors' in newsData) return handleAppError(newsData.errors[0]);
 

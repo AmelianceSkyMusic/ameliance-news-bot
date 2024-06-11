@@ -10,11 +10,7 @@ export function post() {
          logUserInfo(ctx, 'command post');
          if (hasNoAccess({ ctx })) return;
 
-         try {
-            await sendNewsPost(ctx);
-         } catch (error) {
-            console.log('error: ');
-         }
+         await sendNewsPost(ctx);
       } catch (error) {
          handleAppError(error);
       }
