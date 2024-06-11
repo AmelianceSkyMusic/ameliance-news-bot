@@ -1,0 +1,44 @@
+{
+   "name": "ameliance-news-bot",
+   "version": "0.0.1",
+   "description": "",
+   "main": "bot.ts",
+   "scripts": {
+      "build": "rm -rf build && tsc && tsc-alias",
+      "start": "node ./build/bot.js",
+      "dev": "nodemon --watch \"./**/*.ts\" -e ts --exec \"tsx ./api/bot.ts\""
+   },
+   "repository": {
+      "type": "git",
+      "url": "git+https://github.com/amelianceskymusic/ameliance-news-bot.git"
+   },
+   "keywords": [
+      "bot",
+      "telegram",
+      "ameliance"
+   ],
+   "author": "Ameliance SkyMusic <amelianceskymusic@gmail.com>",
+   "license": "ISC",
+   "bugs": {
+      "url": "https://github.com/amelianceskymusic/ameliance-news-bot/issues"
+   },
+   "homepage": "https://github.com/amelianceskymusic/ameliance-news-bot#readme",
+   "devDependencies": {
+      "@types/node": "^20.11.9",
+      "@typescript-eslint/eslint-plugin": "^6.19.1",
+      "@typescript-eslint/parser": "^6.19.1",
+      "dotenv": "^16.4.3",
+      "eslint": "^8.56.0",
+      "eslint-plugin-simple-import-sort": "^10.0.0",
+      "nodemon": "^3.0.3",
+      "tsc-alias": "^1.8.8",
+      "tsx": "^4.7.0",
+      "typescript": "^5.3.3"
+   },
+   "dependencies": {
+      "@google/generative-ai": "^0.2.0",
+      "@grammyjs/parse-mode": "^1.9.0",
+      "ameliance-fetch": "^0.0.1",
+      "grammy": "^1.20.3"
+   }
+}
