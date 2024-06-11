@@ -7,7 +7,7 @@ import { runWithRandomInterval } from '../../shared/helpers/run-with-random-inte
 import { sendNewsPost } from '../helpers/send-news-post';
 
 const oneMinInMs = 1000 * 60;
-const minIntervalInMs = oneMinInMs * 30; //* 30min
+const minIntervalInMs = oneMinInMs * 20; //* 30min
 const maxIntervalInMs = oneMinInMs * 60; //* 60min
 
 export function postInterval() {
