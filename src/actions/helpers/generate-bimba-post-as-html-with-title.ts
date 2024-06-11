@@ -1,5 +1,5 @@
-import { handleAppError } from '../../../shared/helpers/handle-app-error';
-import { sendPromptGemini } from '../../../shared/helpers/send-prompt-gemini';
+import { handleAppError } from '../../shared/helpers/handle-app-error';
+import { sendPromptGemini } from '../../shared/helpers/send-prompt-gemini';
 
 const generatePrompt = ({ title, text }: Record<string, string>) => `
 Уяви, що ти мегаблогер в соціальній мережі. У тебе 2 мільярди послідовувачів.
@@ -28,18 +28,17 @@ const generatePrompt = ({ title, text }: Record<string, string>) => `
 ${text}
 
 Пам'ятай, стаття обов'язково повинна бути перекладена на українську мову.
+А факти статті не перекручені
 `;
 
-export async function generateBimbaPostAsHTML(title: string, text: string) {
+export async function generateBimbaPostAsHTMLWithTitle(title: string, text: string) {
    try {
       const prompt = generatePrompt({ title, text });
 
       let geminiAnswer = await sendPromptGemini(prompt);
-      console.log('geminiAnswer: ', geminiAnswer.length);
 
       //* If the answer exceeds the character limit, try again or return when the limit is exceeded again
       if (geminiAnswer.length > 1000) geminiAnswer = await sendPromptGemini(prompt);
-      console.log('another geminiAnswer: ', geminiAnswer.length);
       if (geminiAnswer.length > 1000) return;
 
       const titleMatch = geminiAnswer.match(/^(.*)$/m);

@@ -1,6 +1,6 @@
-import { getTextFromHTML } from '../../../shared/helpers/get-text-form-html';
-import { handleAppError } from '../../../shared/helpers/handle-app-error';
-import { generateBimbaPostAsHTML } from './generate-bimba-post-as-html';
+import { getTextFromHTML } from '../../shared/helpers/get-text-form-html';
+import { handleAppError } from '../../shared/helpers/handle-app-error';
+import { generateBimbaPostAsHTMLWithTitle } from './generate-bimba-post-as-html-with-title';
 import { getArticleData } from './get-article-data';
 
 import { Context, InputFile } from 'grammy';
@@ -13,7 +13,7 @@ export async function sendNewsPost(ctx: Context) {
 
       const text = getTextFromHTML(html);
 
-      const postAsHTML = await generateBimbaPostAsHTML(article.title, text);
+      const postAsHTML = await generateBimbaPostAsHTMLWithTitle(article.title, text);
       if (!postAsHTML) return;
 
       const {
