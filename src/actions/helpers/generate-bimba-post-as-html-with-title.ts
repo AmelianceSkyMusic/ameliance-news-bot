@@ -39,18 +39,9 @@ export async function generateBimbaPostAsHTMLWithTitle(title: string, text: stri
       const prompt = generatePrompt({ title, text });
       ctx.reply('...sent a Gemini prompt...');
       console.time('get sendPromptGemini');
-      let geminiAnswer = await sendPromptGemini(prompt);
+      const geminiAnswer = await sendPromptGemini(prompt);
       console.timeEnd('get sendPromptGemini');
       ctx.reply(`...received a response with the number of characters: ${geminiAnswer.length}...`);
-
-      //* If the answer exceeds the character limit, try again or return when the limit is exceeded again
-      if (geminiAnswer.length > 1000) {
-         ctx.reply('...character limit exceeded\nSent a second Gemini prompt...');
-         geminiAnswer = await sendPromptGemini(prompt);
-         ctx.reply(
-            `...received a response with the number of characters: ${geminiAnswer.length}...`,
-         );
-      }
 
       if (geminiAnswer.length > 1000) {
          ctx.reply('...character limit exceeded\nCancel');
