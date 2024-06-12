@@ -63,6 +63,7 @@ export async function generateBimbaPostAsHTMLWithTitle(title: string, text: stri
 
       const contentMatch = geminiAnswer.match(/^[^\n]*\n\n([\s\S]*)/m);
       const articleText = contentMatch ? contentMatch[1].trim() : '';
+      ctx.reply('...return post!');
 
       return `<b>${articleTitle}</b>\n\n${articleText}\n\n<b><a href="https://t.me/bimba_news">БІМБА-НОВИНИ →</a></b>`;
    } catch (error) {
