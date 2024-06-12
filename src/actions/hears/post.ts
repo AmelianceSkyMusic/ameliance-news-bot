@@ -17,7 +17,7 @@ export function post() {
          const photoUrl = ctx.msg.photo?.[0].file_id;
          if (!photoUrl) return;
 
-         const postAsHTML = await generateBimbaPostAsHTML(articleText, ctx);
+         const postAsHTML = await generateBimbaPostAsHTML(ctx, { text: articleText });
          if (!postAsHTML) return;
 
          await ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), photoUrl, {

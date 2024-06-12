@@ -35,8 +35,7 @@ export async function sendNewsPost(ctx: Context) {
 
       const text = getTextFromHTML(html);
 
-      const postAsHTML = await generateBimbaPostAsHTMLWithTitle(title, text, ctx);
-
+      const postAsHTML = await generateBimbaPostAsHTML(ctx, { title, text });
       if (!postAsHTML) return;
 
       await ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), new InputFile(new URL(image)), {
