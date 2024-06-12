@@ -47,10 +47,10 @@ export async function generateBimbaPostAsHTMLWithTitle(title: string, text: stri
       }
 
       if (geminiAnswer.length > 1000) {
-         ctx.reply('...Character limit exceeded\nCancel');
+         ctx.reply('...character limit exceeded\nCancel');
          return;
       }
-      ctx.reply('...Received a response, generate a new post...');
+      ctx.reply('...received a response, generate a new post...');
 
       const titleMatch = geminiAnswer.match(/^(.*)$/m);
       const articleTitle = titleMatch ? titleMatch[1].trim().replaceAll('*', '') : '';
