@@ -1,5 +1,8 @@
 import { handleAppError } from '../../shared/helpers/handle-app-error';
+import { replyError } from '../../shared/helpers/reply-error';
 import { sendPromptGemini } from '../../shared/helpers/send-prompt-gemini';
+
+import { Context } from 'grammy';
 
 const generatePrompt = ({ text }: Record<string, string>) => `
 Уяви, що ти мегаблогер в соціальній мережі. У тебе 2 мільярди послідовувачів.
@@ -31,15 +34,23 @@ ${text}
 А факти статті не перекручені
 `;
 
-export async function generateBimbaPostAsHTML(title: string, text: string) {
+export async function generateBimbaPostAsHTML(text: string, ctx: Context) {
    try {
-      const prompt = generatePrompt({ title, text });
-
+      const prompt = generatePrompt({ text });
+      ctx.reply('...sent a Gemini prompt...');
       let geminiAnswer = await sendPromptGemini(prompt);
 
       //* If the answer exceeds the character limit, try again or return when the limit is exceeded again
-      if (geminiAnswer.length > 1000) geminiAnswer = await sendPromptGemini(prompt);
-      if (geminiAnswer.length > 1000) return;
+      if (geminiAnswer.length > 1000) {
+         ctx.reply('...character limit exceeded\nSent a second Gemini prompt...');
+         geminiAnswer = await sendPromptGemini(prompt);
+      }
+
+      if (geminiAnswer.length > 1000) {
+         ctx.reply('...character limit exceeded\nCancel');
+         return;
+      }
+      ctx.reply('...received a response, generate a new post...');
 
       const titleMatch = geminiAnswer.match(/^(.*)$/m);
       const articleTitle = titleMatch ? titleMatch[1].trim().replaceAll('*', '') : '';
@@ -49,6 +60,7 @@ export async function generateBimbaPostAsHTML(title: string, text: string) {
 
       return `<b>${articleTitle}</b>\n\n${articleText}\n\n<b><a href="https://t.me/bimba_news">БІМБА-НОВИНИ →</a></b>`;
    } catch (error) {
-      handleAppError(error);
+      const { code, message } = handleAppError(error);
+      replyError(ctx, { code, message });
    }
 }

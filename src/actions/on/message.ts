@@ -2,6 +2,7 @@ import { bot } from '../../../api/bot';
 import { handleAppError } from '../../shared/helpers/handle-app-error';
 import { hasNoAccess } from '../../shared/helpers/has-no-access';
 import { logUserInfo } from '../../shared/helpers/log-user-info';
+import { replyError } from '../../shared/helpers/reply-error';
 import { generateBimbaPostAsHTML } from '../helpers/generate-bimba-post-as-html';
 
 export function message() {
@@ -17,15 +18,21 @@ export function message() {
          const articleText = text?.split('\n').splice(1).join('\n').trim();
          if (!articleText) return;
 
-         const postAsHTML = await generateBimbaPostAsHTML('', articleText);
+         const postAsHTML = await generateBimbaPostAsHTML(articleText, ctx);
          if (!postAsHTML) return;
 
          ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), photoUrl, {
             caption: postAsHTML,
             parse_mode: 'HTML',
          });
+
+         ctx.replyWithPhoto(photoUrl, {
+            caption: postAsHTML,
+            parse_mode: 'HTML',
+         });
       } catch (error) {
-         handleAppError(error);
+         const { code, message } = handleAppError(error);
+         replyError(ctx, { code, message });
       }
    });
 }

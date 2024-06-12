@@ -8,7 +8,6 @@ export async function sendPromptGemini(prompt: string) {
    const genAI = new GoogleGenerativeAI(GOOGLE_GEMINI_API);
    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
    const result = await model.generateContent(prompt);
-   const response = result.response;
-   const text = response.text();
+   const text = result.response.text();
    return text;
 }
