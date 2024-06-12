@@ -38,9 +38,8 @@ export async function generateBimbaPostAsHTMLWithTitle(title: string, text: stri
    try {
       const prompt = generatePrompt({ title, text });
       ctx.reply('...sent a Gemini prompt...');
-      console.time('get sendPromptGemini');
+
       const geminiAnswer = await sendPromptGemini(prompt);
-      console.timeEnd('get sendPromptGemini');
       ctx.reply(`...received a response with the number of characters: ${geminiAnswer.length}...`);
 
       if (geminiAnswer.length > 1000) {
