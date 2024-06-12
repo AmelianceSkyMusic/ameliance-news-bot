@@ -28,10 +28,6 @@ export function message() {
             parse_mode: 'HTML',
          });
 
-         await ctx.replyWithPhoto(photoUrl, {
-            caption: postAsHTML,
-            parse_mode: 'HTML',
-         });
          console.timeEnd('on message');
       } catch (error) {
          const { code, message } = handleAppError(error);

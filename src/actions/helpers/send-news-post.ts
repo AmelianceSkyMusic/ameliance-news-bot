@@ -39,12 +39,7 @@ export async function sendNewsPost(ctx: Context) {
       console.timeEnd('get bimba post');
       if (!postAsHTML) return;
 
-      ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), new InputFile(new URL(image)), {
-         caption: postAsHTML,
-         parse_mode: 'HTML',
-      });
-
-      ctx.replyWithPhoto(new InputFile(new URL(image)), {
+      await ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), new InputFile(new URL(image)), {
          caption: postAsHTML,
          parse_mode: 'HTML',
       });

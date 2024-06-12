@@ -20,7 +20,7 @@ export function post() {
          const postAsHTML = await generateBimbaPostAsHTML(articleText, ctx);
          if (!postAsHTML) return;
 
-         ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), photoUrl, {
+         await ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), photoUrl, {
             caption: postAsHTML,
             parse_mode: 'HTML',
          });

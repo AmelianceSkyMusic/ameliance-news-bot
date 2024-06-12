@@ -1,4 +1,5 @@
 import { actions } from '../src/actions';
+import { APP } from '../src/constants/app';
 
 import 'dotenv/config';
 import { Bot, GrammyError, HttpError, webhookCallback } from 'grammy';
@@ -32,4 +33,4 @@ if (MODE === 'dev') bot.start();
 
 export default webhookCallback(bot, 'http');
 
-console.log(`BOT STARTED IN "${MODE || 'production'}" MODE`);
+console.log(`BOT ${APP.name} STARTED IN "${MODE || 'production'}" MODE`);
