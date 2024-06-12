@@ -8,6 +8,8 @@ import { generateBimbaPostAsHTML } from '../helpers/generate-bimba-post-as-html'
 export function message() {
    bot.on('message', async (ctx) => {
       try {
+         console.time('on message');
+
          logUserInfo(ctx, 'on message');
          if (hasNoAccess({ ctx })) return;
 
@@ -30,6 +32,7 @@ export function message() {
             caption: postAsHTML,
             parse_mode: 'HTML',
          });
+         console.timeEnd('on message');
       } catch (error) {
          const { code, message } = handleAppError(error);
          replyError(ctx, { code, message });
