@@ -1,7 +1,7 @@
 import { getTextFromHTML } from '../../shared/helpers/get-text-form-html';
 import { handleAppError } from '../../shared/helpers/handle-app-error';
 import { replyError } from '../../shared/helpers/reply-error';
-import { generateBimbaPostAsHTMLWithTitle } from './generate-bimba-post-as-html-with-title';
+import { generateBimbaPostAsHTML } from './generate-bimba-post-as-html';
 import { getArticleData } from './get-article-data';
 
 import { Context, InputFile } from 'grammy';
@@ -21,13 +21,12 @@ export async function sendNewsPost(ctx: Context) {
          image,
          source: { name },
       } = article;
-      console.log('article: ', { title, publishedAt, url, name });
+
       ctx.reply(
          `<b>title:</b> ${title}
-      <b>publishedAt:</b> ${publishedAt}
-      <b>url:</b> ${url}
-      <b>name:</b> ${name}
-      `,
+<b>publishedAt:</b> ${publishedAt}
+<b>url:</b> ${url}
+<b>name:</b> ${name}`,
          {
             parse_mode: 'HTML',
          },
