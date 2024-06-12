@@ -14,13 +14,17 @@ export function message() {
          if (hasNoAccess({ ctx })) return;
 
          const text = ctx.msg.caption;
+         console.log('1 text: ', text);
          const photoUrl = ctx.msg.photo?.[0].file_id;
+         console.log('2 photoUrl: ', photoUrl);
          if (!photoUrl) return;
 
          const articleText = text?.split('\n').splice(1).join('\n').trim();
+         console.log('3 articleText: ', articleText);
          if (!articleText) return;
 
          const postAsHTML = await generateBimbaPostAsHTML(articleText, ctx);
+         console.log('10 postAsHTML: ', postAsHTML);
          if (!postAsHTML) return;
 
          ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), photoUrl, {
@@ -28,10 +32,6 @@ export function message() {
             parse_mode: 'HTML',
          });
 
-         ctx.replyWithPhoto(photoUrl, {
-            caption: postAsHTML,
-            parse_mode: 'HTML',
-         });
          console.timeEnd('on message');
       } catch (error) {
          const { code, message } = handleAppError(error);

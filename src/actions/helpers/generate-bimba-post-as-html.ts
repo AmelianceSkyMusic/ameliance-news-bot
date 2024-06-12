@@ -37,14 +37,17 @@ ${text}
 export async function generateBimbaPostAsHTML(text: string, ctx: Context) {
    try {
       const prompt = generatePrompt({ text });
+      console.log('4 prompt: ', prompt);
       ctx.reply('...sent a Gemini prompt...');
       let geminiAnswer = await sendPromptGemini(prompt);
+      console.log('5 geminiAnswer: ', geminiAnswer);
       ctx.reply(`...received a response with the number of characters: ${geminiAnswer.length}...`);
 
       //* If the answer exceeds the character limit, try again or return when the limit is exceeded again
       if (geminiAnswer.length > 1000) {
          ctx.reply('...character limit exceeded\nSent a second Gemini prompt...');
          geminiAnswer = await sendPromptGemini(prompt);
+         console.log('5a geminiAnswer: ', geminiAnswer);
          ctx.reply(
             `...received a response with the number of characters: ${geminiAnswer.length}...`,
          );
@@ -57,10 +60,14 @@ export async function generateBimbaPostAsHTML(text: string, ctx: Context) {
       ctx.reply('...received a response, generate a new post...');
 
       const titleMatch = geminiAnswer.match(/^(.*)$/m);
+      console.log('6 titleMatch: ', titleMatch);
       const articleTitle = titleMatch ? titleMatch[1].trim().replaceAll('*', '') : '';
+      console.log('7 articleTitle: ', articleTitle);
 
       const contentMatch = geminiAnswer.match(/^[^\n]*\n\n([\s\S]*)/m);
+      console.log('8 contentMatch: ', contentMatch);
       const articleText = contentMatch ? contentMatch[1].trim() : '';
+      console.log('9 articleText: ', articleText);
 
       return `<b>${articleTitle}</b>\n\n${articleText}\n\n<b><a href="https://t.me/bimba_news">БІМБА-НОВИНИ →</a></b>`;
    } catch (error) {
