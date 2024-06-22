@@ -8,12 +8,10 @@ import { sendArticleToSheet } from '../helpers/send-article-to-sheet';
 export function collectPost() {
    bot.command('collectPost', async (ctx) => {
       try {
-         console.time('sendArticleToSheet');
          logUserInfo(ctx, 'command collectPost');
          if (hasNoAccess({ ctx })) return;
 
          await sendArticleToSheet(ctx);
-         console.timeEnd('sendArticleToSheet');
       } catch (error) {
          const { code, message } = handleAppError(error);
          replyError(ctx, { code, message });

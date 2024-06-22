@@ -17,8 +17,8 @@ export function collectPostInterval() {
             async () => {
                await sendArticleToSheet(ctx);
             },
-            0.5,
-            1,
+            10,
+            15,
          );
       } catch (error) {
          const { code, message } = handleAppError(error);
