@@ -4,10 +4,10 @@ import { hasNoAccess } from '../../shared/helpers/has-no-access';
 import { logUserInfo } from '../../shared/helpers/log-user-info';
 import { replyError } from '../../shared/helpers/reply-error';
 import { runWithRandomInterval } from '../../shared/helpers/run-with-random-interval';
-import { sendArticle } from '../helpers/send-article';
+import { sendArticleToSheet } from '../helpers/send-article-to-sheet';
 
-export function postInterval() {
-   bot.command('postInterval', (ctx) => {
+export function collectPostInterval() {
+   bot.command('collectPostInterval', async (ctx) => {
       try {
          logUserInfo(ctx, 'command post interval');
          if (hasNoAccess({ ctx })) return;
@@ -15,10 +15,10 @@ export function postInterval() {
          runWithRandomInterval(
             ctx,
             async () => {
-               await sendArticle(ctx);
+               await sendArticleToSheet(ctx);
             },
-            10,
-            15,
+            0.5,
+            1,
          );
       } catch (error) {
          const { code, message } = handleAppError(error);

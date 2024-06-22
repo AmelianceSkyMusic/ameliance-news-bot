@@ -1,18 +1,27 @@
 import { actions } from '../src/actions';
 import { APP } from '../src/constants/app';
+import { ENV, MODE } from '../src/constants/env';
+import { MyContext } from '../src/types/my-context';
 
-import 'dotenv/config';
-import { Bot, GrammyError, HttpError, webhookCallback } from 'grammy';
+import { Bot, GrammyError, HttpError, session, webhookCallback } from 'grammy';
 
-const { BOT_TOKEN, MODE } = process.env;
-
-if (!BOT_TOKEN) throw new Error('BOT_TOKEN is missing!');
+if (!ENV.BOT_TOKEN) throw new Error('BOT_TOKEN is missing!');
 if (!MODE) throw new Error('MODE is missing!');
-export const bot = new Bot(BOT_TOKEN);
 
+export const bot = new Bot<MyContext>(ENV.BOT_TOKEN);
+
+bot.use(
+   session({
+      initial: () => ({ postsToPublic: {} }),
+   }),
+);
+
+export const onMessagePostMenu = actions.menu.onMessagePostMenu();
 actions.command.start();
 actions.command.post();
 actions.command.postInterval();
+actions.command.collectPostInterval();
+actions.command.collectPost();
 actions.hears.post();
 actions.on.message();
 
@@ -33,4 +42,4 @@ if (MODE === 'dev') bot.start();
 
 export default webhookCallback(bot, 'http');
 
-console.log(`BOT ${APP.name} STARTED IN "${MODE || 'production'}" MODE`);
+console.log(`BOT ${APP.name} STARTED IN "${MODE}" MODE`);

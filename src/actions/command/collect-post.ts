@@ -3,23 +3,17 @@ import { handleAppError } from '../../shared/helpers/handle-app-error';
 import { hasNoAccess } from '../../shared/helpers/has-no-access';
 import { logUserInfo } from '../../shared/helpers/log-user-info';
 import { replyError } from '../../shared/helpers/reply-error';
-import { runWithRandomInterval } from '../../shared/helpers/run-with-random-interval';
-import { sendArticle } from '../helpers/send-article';
+import { sendArticleToSheet } from '../helpers/send-article-to-sheet';
 
-export function postInterval() {
-   bot.command('postInterval', (ctx) => {
+export function collectPost() {
+   bot.command('collectPost', async (ctx) => {
       try {
-         logUserInfo(ctx, 'command post interval');
+         console.time('sendArticleToSheet');
+         logUserInfo(ctx, 'command collectPost');
          if (hasNoAccess({ ctx })) return;
 
-         runWithRandomInterval(
-            ctx,
-            async () => {
-               await sendArticle(ctx);
-            },
-            10,
-            15,
-         );
+         await sendArticleToSheet(ctx);
+         console.timeEnd('sendArticleToSheet');
       } catch (error) {
          const { code, message } = handleAppError(error);
          replyError(ctx, { code, message });

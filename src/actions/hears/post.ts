@@ -1,4 +1,4 @@
-import { bot } from '../../../api/bot';
+import { bot, onMessagePostMenu } from '../../../api/bot';
 import { handleAppError } from '../../shared/helpers/handle-app-error';
 import { hasNoAccess } from '../../shared/helpers/has-no-access';
 import { logUserInfo } from '../../shared/helpers/log-user-info';
@@ -14,15 +14,16 @@ export function post() {
          const articleText = text?.split('\n').splice(1).join('\n').trim();
          if (!articleText) return;
 
-         const photoUrl = ctx.msg.photo?.[0].file_id;
-         if (!photoUrl) return;
+         const postPhoto = ctx.msg.photo?.[0].file_id;
+         if (!postPhoto) return;
 
          const postAsHTML = await generateBimbaPostAsHTML(ctx, { text: articleText });
          if (!postAsHTML) return;
 
-         await ctx.api.sendPhoto(Number(process.env.BIMBA_NEWS_ID), photoUrl, {
+         await ctx.replyWithPhoto(postPhoto, {
             caption: postAsHTML,
             parse_mode: 'HTML',
+            reply_markup: onMessagePostMenu,
          });
       } catch (error) {
          const { code, message } = handleAppError(error);

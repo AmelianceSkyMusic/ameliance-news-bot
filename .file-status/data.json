@@ -1,3 +1,20 @@
 {
-   "fileStatuses": []
+   "fileStatuses": [
+      {
+         "path": "d:\\Work\\programming\\telegram\\ameliance-news-bot\\src\\actions\\helpers\\get-article.ts",
+         "status": "done"
+      },
+      {
+         "path": "d:\\Work\\programming\\telegram\\ameliance-news-bot\\src\\actions\\helpers\\get-html-data.ts",
+         "status": "done"
+      },
+      {
+         "path": "d:\\Work\\programming\\telegram\\ameliance-news-bot\\src\\actions\\helpers\\get-text-form-html.ts",
+         "status": "done"
+      },
+      {
+         "path": "d:\\Work\\programming\\telegram\\ameliance-news-bot\\src\\actions\\helpers\\send-article-to-sheet.ts",
+         "status": "done"
+      }
+   ]
 }

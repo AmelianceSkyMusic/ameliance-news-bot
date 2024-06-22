@@ -1,3 +1,4 @@
+import { ENV } from '../../constants/env';
 import { handleAppError } from '../../shared/helpers/handle-app-error';
 import { replyError } from '../../shared/helpers/reply-error';
 import { Article, GNews } from '../../types/gnews';
@@ -6,10 +7,10 @@ import { Context } from 'grammy';
 
 const articleHistory = [] as Array<string>;
 
-export async function getArticleData(ctx: Context) {
+export async function getArticle(ctx: Context) {
    try {
       const respNews = await fetch(
-         `https://gnews.io/api/v4/top-headlines?country=ua&category=general&apikey=${process.env.G_NEWS_API_KEY}`,
+         `https://gnews.io/api/v4/top-headlines?country=ua&category=general&apikey=${ENV.G_NEWS_API_KEY}`,
       );
       const newsData: GNews = await respNews.json();
 
@@ -33,9 +34,7 @@ export async function getArticleData(ctx: Context) {
       }
 
       if (!article) return;
-      const data = await fetch(article.url);
-      const html = await data.text();
-      return { article, html };
+      return article;
    } catch (error) {
       const { code, message } = handleAppError(error);
       replyError(ctx, { code, message });
