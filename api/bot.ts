@@ -26,6 +26,7 @@ actions.hears.post();
 actions.on.message();
 
 bot.catch((err) => {
+   console.log('-----err: ', err);
    const ctx = err.ctx;
    console.error(`Помилка під час обробки оновлення ${ctx.update.update_id}:`);
    const e = err.error;
