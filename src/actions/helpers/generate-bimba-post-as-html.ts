@@ -36,6 +36,7 @@ ${title ? getTitle(title) : ''}
 ${text}
 
 Пам'ятай, стаття обов'язково повинна бути перекладена на українську мову.
+Пиши стисло і по суті. Кількість символів не більше п'ятсот знаків, бо є ліміт на текст.
 А факти статті не перекручені.
 `;
 
@@ -49,16 +50,36 @@ const getGeminiAnswer = async (
    enterCount++;
    console.time('getGeminiAnswer');
    const geminiAnswer = await sendPromptGemini(prompt);
+
    console.timeEnd('getGeminiAnswer');
-   updateMessageText(
+   await updateMessageText(
       `...received a response with the number of characters: ${geminiAnswer.length}...`,
    );
    if (geminiAnswer.length > 1000) {
-      updateMessageText(`...character limit exceeded\nSent an another Gemini prompt...`);
+      await updateMessageText(
+         `...character limit exceeded: ${geminiAnswer.length}\nSent an another Gemini prompt...`,
+      );
       return await getGeminiAnswer(prompt, updateMessageText, enterCount);
    }
    return geminiAnswer;
 };
+
+function toPascalCase(string: string) {
+   const words =
+      string.match(/[A-Z]{2,}(?=[A-Z][a-z]+[0-9]*|\b)|[A-Z]?[a-z]+[0-9]*|[A-Z]|[0-9]+/g) || [];
+
+   const transformedWords = words.map(
+      (word) => word.slice(0, 1).toUpperCase() + word.slice(1).toLowerCase(),
+   );
+
+   return transformedWords.join('');
+}
+
+function transformParagraphTags(paragraph: string): string {
+   return paragraph.replace(/#(\w+)\b/g, (_, tag: string) => {
+      return `#${toPascalCase(tag)}`;
+   });
+}
 
 export async function generateBimbaPostAsHTML(
    ctx: Context,
@@ -71,18 +92,20 @@ export async function generateBimbaPostAsHTML(
 
       const geminiAnswer = await getGeminiAnswer(prompt, updateMessageText);
       if (!geminiAnswer) {
-         updateMessageText('...cancel');
+         await updateMessageText('...cancel');
          return;
       }
 
-      updateMessageText('...received a response, generate a new post...');
+      await updateMessageText('...received a response, generate a new post...');
 
       const titleMatch = geminiAnswer.match(/^(.*)$/m);
-      const articleTitle = titleMatch ? titleMatch[1].trim().replaceAll('*', '') : '';
+      const articleTitle = titleMatch ? titleMatch[1].trim().replaceAll('*', '').toUpperCase() : '';
 
       const contentMatch = geminiAnswer.match(/^[^\n]*\n\n([\s\S]*)/m);
-      const articleText = contentMatch ? contentMatch[1].trim() : '';
-      updateMessageText('...return post!');
+
+      const articleText = contentMatch ? transformParagraphTags(contentMatch[1].trim()) : '';
+
+      await updateMessageText('...return post!');
 
       return `<b>${articleTitle}</b>\n\n${articleText}\n\n<b><a href="https://t.me/bimba_news">БІМБА-НОВИНИ →</a></b>`;
    } catch (error) {
