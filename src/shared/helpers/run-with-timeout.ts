@@ -13,8 +13,11 @@ export async function runWithTimeout(
    statusMessage?: string,
    timeoutMs: number = 9000,
 ) {
-   const timeout = new Promise((_, reject) =>
-      setTimeout(() => reject(new Error('Operation timed out')), timeoutMs),
+   const timeout = new Promise<void>((resolve) =>
+      setTimeout(() => {
+         console.warn('Operation timed out');
+         resolve();
+      }, timeoutMs),
    );
 
    let replyResponse;
@@ -22,7 +25,6 @@ export async function runWithTimeout(
    try {
       if (statusMessage) {
          replyResponse = await replyHTML(ctx, statusMessage);
-         console.log('replyResponse: ', replyResponse);
       }
       await Promise.race([callback(ctx), timeout]);
    } catch (error) {
