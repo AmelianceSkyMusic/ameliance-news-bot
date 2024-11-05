@@ -15,9 +15,11 @@ export async function sendArticle(ctx: Context) {
    try {
       const collectedArticleList = await getCollectedArticleList(ctx);
 
-      if (!collectedArticleList) return;
       const respArticle = await getFreshArticle(ctx, collectedArticleList);
-      if (!respArticle) return;
+      if (!respArticle) {
+         await ctx.reply('NO FRESH ARTICLE!😢');
+         return;
+      }
 
       const {
          title,
