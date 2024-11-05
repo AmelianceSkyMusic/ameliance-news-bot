@@ -1,6 +1,5 @@
 import { APP } from '../../constants/app';
 import { handleAppError } from './handle-app-error';
-import { prepareEditMessageText } from './prepare-edit-message-text';
 import { removeMessageById } from './remove-message-by-id';
 import { replyHTML } from './reply-html';
 
@@ -15,26 +14,22 @@ export async function runWithTimeout(
    timeoutMs: number = 9000,
 ) {
    const timeout = new Promise<void>((resolve) =>
-      setTimeout(() => {
+      setTimeout(async () => {
          console.warn(`${APP.name} > Operation timed out`);
+         const warnMessageResp = await replyHTML(ctx, 'Сарян, братан, я обідаю...');
+         await removeMessageById({ ctx, messageId: warnMessageResp.message_id });
          resolve();
       }, timeoutMs),
    );
 
-   let replyResponse;
-
+   let replyResp;
    try {
-      if (statusMessage) {
-         replyResponse = await replyHTML(ctx, statusMessage);
-      }
+      if (statusMessage) replyResp = await replyHTML(ctx, statusMessage);
+
       await Promise.race([callback(ctx), timeout]);
    } catch (error) {
-      if (replyResponse) {
-         const updateMessageText = await prepareEditMessageText(ctx, replyResponse);
-         await updateMessageText('Сарян, братан, я обідаю...');
-      }
       handleAppError(error);
    } finally {
-      if (replyResponse) await removeMessageById({ ctx, messageId: replyResponse.message_id });
+      if (replyResp) await removeMessageById({ ctx, messageId: replyResp.message_id });
    }
 }
