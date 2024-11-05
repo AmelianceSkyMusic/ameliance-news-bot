@@ -6,7 +6,7 @@ import { Message } from 'grammy/types';
 export async function replyHTML(
    ctx: Context,
    text: string,
-   mode: 'mention' | '',
+   mode: 'mention' | '' = '',
    replyMessageId?: number,
    params: Record<string, string> = {},
 ): Promise<Message.TextMessage> {
