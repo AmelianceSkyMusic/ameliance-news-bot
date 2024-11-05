@@ -1,3 +1,4 @@
+import { APP } from '../../constants/app';
 import { handleAppError } from './handle-app-error';
 import { prepareEditMessageText } from './prepare-edit-message-text';
 import { removeMessageById } from './remove-message-by-id';
@@ -15,7 +16,7 @@ export async function runWithTimeout(
 ) {
    const timeout = new Promise<void>((resolve) =>
       setTimeout(() => {
-         console.warn('Operation timed out');
+         console.warn(`${APP.name} > Operation timed out`);
          resolve();
       }, timeoutMs),
    );
