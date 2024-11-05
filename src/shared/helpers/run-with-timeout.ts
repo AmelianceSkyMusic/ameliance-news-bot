@@ -25,9 +25,11 @@ export async function runWithTimeout(
    let replyResp;
    try {
       if (statusMessage) replyResp = await replyHTML(ctx, statusMessage);
-
+      console.log('Starting callback execution...');
       await Promise.race([callback(ctx), timeout]);
+      console.log('Callback execution completed successfully.');
    } catch (error) {
+      console.error('Error in callback:', error);
       handleAppError(error);
    } finally {
       if (replyResp) await removeMessageById({ ctx, messageId: replyResp.message_id });
