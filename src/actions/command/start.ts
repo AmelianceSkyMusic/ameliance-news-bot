@@ -8,19 +8,15 @@ export function start() {
    bot.command(
       'start',
       async (ctx) =>
-         await runWithTimeout(
-            ctx,
-            async () => {
-               try {
-                  logUserInfo(ctx, 'command start');
-                  if (hasNoAccess({ ctx })) return;
+         await runWithTimeout(ctx, async () => {
+            try {
+               logUserInfo(ctx, 'command start');
+               if (hasNoAccess({ ctx })) return;
 
-                  ctx.reply('Ласкаво просимо! Що треба?');
-               } catch (error) {
-                  handleAppError(error);
-               }
-            },
-            'О, бачу є для мене робота...',
-         ),
+               ctx.reply('Ласкаво просимо! Що треба?');
+            } catch (error) {
+               handleAppError(error);
+            }
+         }),
    );
 }

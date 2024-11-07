@@ -11,27 +11,23 @@ export function collectPostInterval() {
    bot.command(
       'collectPostInterval',
       async (ctx) =>
-         await runWithTimeout(
-            ctx,
-            async () => {
-               try {
-                  logUserInfo(ctx, 'command post interval');
-                  if (hasNoAccess({ ctx })) return;
+         await runWithTimeout(ctx, async () => {
+            try {
+               logUserInfo(ctx, 'command post interval');
+               if (hasNoAccess({ ctx })) return;
 
-                  runWithRandomInterval(
-                     ctx,
-                     async () => {
-                        await sendArticleToSheet(ctx);
-                     },
-                     10,
-                     15,
-                  );
-               } catch (error) {
-                  const { code, message } = handleAppError(error);
-                  replyError(ctx, { code, message });
-               }
-            },
-            'О, бачу є для мене робота...',
-         ),
+               runWithRandomInterval(
+                  ctx,
+                  async () => {
+                     await sendArticleToSheet(ctx);
+                  },
+                  10,
+                  15,
+               );
+            } catch (error) {
+               const { code, message } = handleAppError(error);
+               replyError(ctx, { code, message });
+            }
+         }),
    );
 }
