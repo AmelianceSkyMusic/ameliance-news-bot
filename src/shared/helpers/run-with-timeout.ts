@@ -11,22 +11,22 @@ export async function runWithTimeout(
    ctx: Context,
    callback: AsyncCallback,
    timeoutMs: number = 9000,
-) {
-   const timeout = new Promise<void>((resolve) =>
+): Promise<{ ok: boolean }> {
+   const timeout = new Promise<{ ok: boolean }>((_, reject) =>
       setTimeout(async () => {
-         console.warn(`${APP.name} > Operation timed out`);
-         const warnMessageResp = await replyHTML(ctx, 'Сарян, братан, я обідаю...');
-         await removeMessageById({ ctx, messageId: warnMessageResp.message_id });
-         resolve();
+         reject(`${APP.name} > Operation timed out`);
       }, timeoutMs),
    );
 
    try {
       console.log('Starting callback execution...');
-      const result = await Promise.race([callback(ctx), timeout]);
-      console.log('result: ', result);
+      await Promise.race([callback(ctx), timeout]);
       console.log('Callback execution completed successfully.');
+      return { ok: true };
    } catch (error) {
+      const warnMessageResp = await replyHTML(ctx, 'Сарян, братан, я обідаю...');
+      await removeMessageById({ ctx, messageId: warnMessageResp.message_id });
       handleAppError(error);
+      return { ok: false };
    }
 }
