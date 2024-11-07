@@ -22,6 +22,7 @@ export function post() {
 
                   signal.addEventListener('abort', () => {
                      clearTimeout(timer);
+                     ctx.reply('abort...');
                   });
                });
             await timeout(ctx, abortSignal);
