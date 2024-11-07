@@ -38,3 +38,12 @@ export function post() {
       console.timeEnd('runWithTimeout');
    });
 }
+
+// try {
+//    logUserInfo(ctx, 'command post');
+//    if (hasNoAccess({ ctx })) return;
+//    await sendArticle(ctx);
+// } catch (error) {
+//    const { code, message } = handleAppError(error);
+//    replyError(ctx, { code, message });
+// }
