@@ -23,7 +23,8 @@ export async function runWithTimeout(
 
    try {
       console.log('Starting callback execution...');
-      await Promise.race([callback(ctx), timeout]);
+      const result = await Promise.race([callback(ctx), timeout]);
+      console.log('result: ', result);
       console.log('Callback execution completed successfully.');
    } catch (error) {
       handleAppError(error);
