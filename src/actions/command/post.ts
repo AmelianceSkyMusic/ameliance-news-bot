@@ -23,7 +23,7 @@ export function post() {
                         await ctx.reply('Шось там роблю');
                      }
                      resolve();
-                  }, 20000);
+                  }, 5000);
 
                   signal.addEventListener('abort', () => {
                      clearTimeout(timer);
