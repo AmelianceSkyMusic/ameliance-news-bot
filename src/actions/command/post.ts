@@ -10,15 +10,21 @@ export function post() {
       console.time('runWithTimeout');
       const initialResponse = await ctx.reply('Обробляю ваш запит...');
       try {
-         const result = await runWithTimeout(ctx, async () => {
-            const timeout = (ctx: Context) =>
-               new Promise<void>((resolve) =>
-                  setTimeout(async () => {
-                     await ctx.reply('Шось там роблю');
+         const result = await runWithTimeout(ctx, async (ctx, abortSignal) => {
+            const timeout = (ctx: Context, signal: AbortSignal) =>
+               new Promise<void>((resolve) => {
+                  const timer = setTimeout(async () => {
+                     if (!signal.aborted) {
+                        await ctx.reply('Шось там роблю');
+                     }
                      resolve();
-                  }, 20000),
-               );
-            await timeout(ctx);
+                  }, 20000);
+
+                  signal.addEventListener('abort', () => {
+                     clearTimeout(timer);
+                  });
+               });
+            await timeout(ctx, abortSignal);
          });
          console.log('result: ', result);
       } catch (error) {
