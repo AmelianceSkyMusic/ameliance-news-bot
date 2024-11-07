@@ -8,6 +8,7 @@ import { sendArticle } from '../helpers/send-article';
 
 export function post() {
    bot.command('post', async (ctx) => {
+      console.time('runWithTimeout');
       await runWithTimeout(
          ctx,
          async () => {
@@ -23,5 +24,6 @@ export function post() {
          },
          'О, бачу є для мене робота 2...',
       );
+      console.timeEnd('runWithTimeout');
    });
 }
