@@ -9,6 +9,11 @@ export function post() {
    bot.command('post', async (ctx) => {
       console.time('runWithTimeout');
       const initialResponse = await ctx.reply('Обробляю ваш запит...');
+      setTimeout(() => {
+         if (initialResponse) {
+            removeMessageById({ ctx, messageId: initialResponse.message_id });
+         }
+      }, 1000);
       try {
          const result = await runWithTimeout(ctx, async (ctx, abortSignal) => {
             const timeout = (ctx: Context, signal: AbortSignal) =>
@@ -30,10 +35,6 @@ export function post() {
          console.log('result: ', result);
       } catch (error) {
          handleAppError(error);
-      } finally {
-         if (initialResponse) {
-            await removeMessageById({ ctx, messageId: initialResponse.message_id });
-         }
       }
 
       console.timeEnd('runWithTimeout');
